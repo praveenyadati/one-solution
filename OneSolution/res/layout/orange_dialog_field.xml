@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/alertwidth"
+    android:layout_height="wrap_content"
+    android:background="@drawable/orange_button_unselect" >
+    
+     <TextView
+        android:id="@+id/audio_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Please provide a name "
+        android:textColor="@color/orange"
+        android:textSize="15sp"
+        android:layout_margin="10dip" />
+
+    <EditText
+        android:id="@+id/file_name_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/oranhege_background_border"
+        android:layout_below="@id/audio_name"
+        android:padding="8dip"
+        android:gravity="center_horizontal"
+        android:text="record01"
+        android:textColor="@color/orange" />
+
+    <Button
+        android:id="@+id/button_yes"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/file_name_field"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dip"
+        android:background="@drawable/orange_button_select"
+        android:text="Ok"
+        android:textColor="@color/white" />
+
+</RelativeLayout>

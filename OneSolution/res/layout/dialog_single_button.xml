@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/alert_width"
+    android:layout_height="wrap_content"
+    android:background="@drawable/button_unselect" >
+
+    <TextView
+        android:id="@+id/text_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:textSize="18sp"
+        android:textColor="@color/blue" />
+
+    <Button
+        android:id="@+id/button_ok"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_message"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button_select"
+        android:text="Ok"
+        android:textColor="@color/white" />
+
+</RelativeLayout>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dip"
+    android:layout_height="wrap_content"
+    android:background="@drawable/button_unselect" >
+
+    <TextView
+        android:id="@+id/file_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerHorizontal="true"
+        android:padding="15dip"
+        android:text="Name : "
+        android:textColor="@color/blue"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/file_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/file_name"
+        android:layout_centerHorizontal="true"
+        android:padding="15dip"
+        android:text="Type : "
+        android:textColor="@color/blue"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/file_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/file_type"
+        android:layout_centerHorizontal="true"
+        android:padding="15dip"
+        android:text="Size : "
+        android:textColor="@color/blue"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/file_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/file_size"
+        android:layout_centerHorizontal="true"
+        android:padding="15dip"
+        android:text="Last modified : "
+        android:textColor="@color/blue"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/button_ok"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_select"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/file_date"
+        android:padding="15dip"
+        android:text="OK"
+        android:textColor="@color/white" />
+
+</RelativeLayout>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/alert_width"
+    android:layout_height="wrap_content"
+    android:background="@drawable/button_unselect" >
+
+    <ListView
+        android:id="@+id/file_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@color/blue"
+        android:dividerHeight="1dip"
+        android:listSelector="@android:color/transparent" >
+    </ListView>
+
+</RelativeLayout>
