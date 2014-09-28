@@ -15,6 +15,8 @@ public class AppPreferences
 	public synchronized void updateHidenFileShow(boolean val) {
 		myPrefs.edit().putBoolean("hiden", val).commit();
 	}
+	
+	
 
 	public boolean isHidenFileEnable() {
 		return myPrefs.getBoolean("hiden", false);
