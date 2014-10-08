@@ -127,16 +127,17 @@
         android:layout_alignParentBottom="true"
         android:background="@drawable/background_border"
         android:orientation="horizontal"
-        android:weightSum="3" >
+        android:weightSum="5" >
 
         <Button
-            android:id="@+id/new_record"
+            android:id="@+id/new_create"
             android:layout_width="0dip"
             android:layout_height="50dip"
             android:layout_weight="1"
             android:background="@color/blue"
-            android:text="New Record"
-            android:textColor="@color/white" />
+            android:text="Create"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
 
         <View
             android:layout_width="1dip"
@@ -144,13 +145,14 @@
             android:background="@color/white" />
 
         <Button
-            android:id="@+id/new_file"
+            android:id="@+id/favourite"
             android:layout_width="0dip"
             android:layout_height="50dip"
             android:layout_weight="1"
             android:background="@color/blue"
-            android:text="New File"
-            android:textColor="@color/white" />
+            android:text="Favourite"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
 
         <View
             android:layout_width="1dip"
@@ -158,13 +160,43 @@
             android:background="@color/white" />
 
         <Button
-            android:id="@+id/new_folder"
+            android:id="@+id/refresh"
             android:layout_width="0dip"
             android:layout_height="50dip"
             android:layout_weight="1"
             android:background="@color/blue"
-            android:text="New Folder"
-            android:textColor="@color/white" />
+            android:text="Refresh"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <View
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
+
+        <Button
+            android:id="@+id/search"
+            android:layout_width="0dip"
+            android:layout_height="50dip"
+            android:layout_weight="1"
+            android:background="@color/blue"
+            android:text="Search"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+         <View
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
+
+        <Button
+            android:id="@+id/select"
+            android:layout_width="0dip"
+            android:layout_height="50dip"
+            android:layout_weight="1"
+            android:background="@color/blue"
+            android:text="Select"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
     </LinearLayout>
 
 </RelativeLayout>

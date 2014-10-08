@@ -21,6 +21,6 @@
         android:layout_toRightOf="@id/list_folder_icon"
         android:text="test"
         android:textColor="@color/blue"
-        android:textSize="15sp" />
+        android:textSize="13sp" />
 
 </RelativeLayout>
