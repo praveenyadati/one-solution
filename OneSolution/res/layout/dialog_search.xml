@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/alertwidth"
+    android:layout_height="wrap_content"
+    android:background="@drawable/button_unselect" >
+
+    <TextView
+        android:id="@+id/file_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dip"
+        android:text="Please enter text "
+        android:textColor="@color/blue"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/name_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/file_name"
+        android:background="@drawable/background_border"
+        android:gravity="center_horizontal"
+        android:padding="8dip"
+        android:textColor="@color/blue" />
+
+    <Button
+        android:id="@+id/button_ok"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name_field"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dip"
+        android:background="@drawable/button_select"
+        android:text="Ok"
+        android:textColor="@color/white" />
+
+</RelativeLayout>

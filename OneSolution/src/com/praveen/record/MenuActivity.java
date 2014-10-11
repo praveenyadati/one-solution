@@ -28,6 +28,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -72,8 +73,20 @@ public class MenuActivity extends Activity implements OnClickListener {
 	private Button mButtonFavourite					= null;
 
 	private Button mButtonRefresh					= null;
-	
+
 	private Button mButtonSearch					= null;
+
+	private Button mButtonSelect					= null;
+
+	private Button mButtonDelete					= null;
+
+	private Button mButtonPaste						= null;
+
+	private Button mButtonCopy						= null;
+
+	private Button mButtonCut						= null;
+	
+	private Button mButtonCancel					= null;
 
 	private List<File> directories					= null;
 
@@ -86,7 +99,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 	private String[] folderOptions					= null;
 
 	private String[] audioFolderOptions				= null;
-	
+
 	private String[] fileCreateOptions				= null;
 
 	private AppPreferences preferences				= null;
@@ -102,8 +115,24 @@ public class MenuActivity extends Activity implements OnClickListener {
 	private String[] textFormats					= null;
 
 	private MergeTask mergeTask						= null;
-	
+
 	private boolean hiddenFileEnable				= false;
+
+	private boolean selectEnable					= false;
+
+	private boolean[] cellIdentifier				= null;
+
+	private LinearLayout mLayoutBottom				= null;
+
+	private LinearLayout mLayoutBottomActions		= null;
+
+	private List<File> selectedFiles				= null;
+
+	private boolean copySelected					= false;
+	
+	private boolean cutSelected						= false;
+	
+	private boolean searchSelected					= false;
 
 
 	@Override
@@ -132,6 +161,14 @@ public class MenuActivity extends Activity implements OnClickListener {
 		mImageSettings = (ImageView) findViewById(R.id.image_setting);
 		mImageFolderType = (ImageView) findViewById(R.id.image_folder_type);
 		mButtonSearch = (Button) findViewById(R.id.search);
+		mButtonSelect = (Button) findViewById(R.id.select);
+		mLayoutBottom = (LinearLayout) findViewById(R.id.bottombar_options);
+		mLayoutBottomActions = (LinearLayout) findViewById(R.id.bottombar_actions);
+		mButtonDelete = (Button) findViewById(R.id.delete);
+		mButtonPaste = (Button) findViewById(R.id.paste);
+		mButtonCopy = (Button) findViewById(R.id.copy);
+		mButtonCut = (Button) findViewById(R.id.cut);
+		mButtonCancel = (Button) findViewById(R.id.cancel);
 	}
 
 	private void initObjects() {
@@ -146,6 +183,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 		audioFolderOptions = new String[]{"Rename","Copy","Delete","Zip & Send file", "Properties","Merge with"};
 		audioFormats = new String[]{".mp3",".3gp",".mp4",".wav","ogg","flac","aac","amr"};
 		textFormats = new String[]{".txt",".doc",".docx"};
+		selectedFiles = new ArrayList<File>();
 	}
 
 	private void setInitilaData() {
@@ -157,6 +195,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 			mImageFolderType.setImageResource(R.drawable.grid);
 		}
 		directories = OSFileUtils.listFiles(rootDirectory, hiddenFileEnable);
+		cellIdentifier = new boolean[directories.size()];
 	}
 
 	private void addClickListeners() {
@@ -167,11 +206,17 @@ public class MenuActivity extends Activity implements OnClickListener {
 		mButtonRefresh.setOnClickListener(this);
 		mImageFolderType.setOnClickListener(this);
 		mButtonSearch.setOnClickListener(this);
+		mButtonSelect.setOnClickListener(this);
+		mButtonDelete.setOnClickListener(this);
+		mButtonPaste.setOnClickListener(this);
+		mButtonCopy.setOnClickListener(this);
+		mButtonCut.setOnClickListener(this);
+		mButtonCancel.setOnClickListener(this);
 		mGridFolders.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View view, int pos,long id) {
-				doClickItemAction(pos);
+				doClickItemAction(view,pos);
 			}
 		});
 
@@ -194,7 +239,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View view, int pos,long id) {
-				doClickItemAction(pos);
+				doClickItemAction(view,pos);
 			}
 		});
 
@@ -212,8 +257,25 @@ public class MenuActivity extends Activity implements OnClickListener {
 		});
 	}
 
-	private void doClickItemAction(int pos) {
+	private void resetCellIdentifiers() {
+
+	}
+
+	private void doClickItemAction(View view, int pos) {
 		String path = directories.get(pos).getAbsoluteFile().toString();
+		File f = new File(path);
+		if(selectEnable) {
+			if(cellIdentifier[pos]) {
+				cellIdentifier[pos] = false;
+				view.setBackgroundColor(Color.WHITE);
+				selectedFiles.remove(f);
+			} else {
+				cellIdentifier[pos] = true;
+				view.setBackgroundColor(Color.YELLOW);
+				selectedFiles.add(f);
+			}
+			return;
+		}
 		if(OSFileUtils.isAudioFile(path)) {
 			if(fileMergePath != null) {
 				File file1 = new File(fileMergePath);
@@ -246,7 +308,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 			preferences.updatePreviousPath(rootDirectory.getAbsolutePath());
 			mTextPath.setText(rootDirectory.getAbsolutePath().toString());
 			directories = OSFileUtils.listFiles(rootDirectory, hiddenFileEnable); 
-			
+			cellIdentifier = new boolean[directories.size()];
 			FileAdapter adptr = new FileAdapter(MenuActivity.this);
 			mGridFolders.setAdapter(adptr);
 			mListFolders.setAdapter(adptr);
@@ -273,7 +335,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 		return SDCardRoot.getAbsoluteFile();
 	}
 
-	
+
 	private class FileAdapter extends BaseAdapter {
 
 		private LayoutInflater inflater			= null;
@@ -313,6 +375,10 @@ public class MenuActivity extends Activity implements OnClickListener {
 				holder=(ViewHolder)view.getTag();
 			}
 			updateViews(holder, pos);
+			view.setBackgroundColor(Color.WHITE);
+			if(cellIdentifier[pos]) {
+				view.setBackgroundColor(Color.YELLOW);
+			}
 			return view;
 		}
 
@@ -330,8 +396,10 @@ public class MenuActivity extends Activity implements OnClickListener {
 			} 
 
 			holder.text.setText(fileName);
-			if(OSFileUtils.isAudioFile(path)) {
-				holder.folder.setImageResource(R.drawable.audio);
+			if(path.endsWith(".mp4")) {
+				holder.folder.setImageResource(R.drawable.video_file);
+			} else if(OSFileUtils.isAudioFile(path)) {
+				holder.folder.setImageResource(R.drawable.audio_file);
 			} else if(OSFileUtils.isTextFile(path)) {
 				holder.folder.setImageResource(R.drawable.document);
 			} else if(!directories.get(pos).isDirectory() && OSFileUtils.isNormalFile(path)) {
@@ -362,16 +430,15 @@ public class MenuActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.new_create:
 			showFileCreateOptionsAlert();
-		//	doRecordButtonAction();
 			break;
 		case R.id.image_setting:
 			doSettingsButtonAction();
 			break;
 		case R.id.favourite:
-			//createNewFile();
+			
 			break;
 		case R.id.refresh:
-			//showNewFileAlert(true);
+			
 			break;
 		case R.id.image_folder_type:
 			doFolderTypeButtonAction();
@@ -379,7 +446,70 @@ public class MenuActivity extends Activity implements OnClickListener {
 		case R.id.search:
 			doSearchButtonAction();
 			break;
+		case R.id.select:
+			selectEnable = true;
+			mLayoutBottomActions.setVisibility(View.VISIBLE);
+			mLayoutBottom.setVisibility(View.GONE);
+			break;
+		case R.id.delete:
+			if(!selectedFiles.isEmpty() && (!copySelected && !cutSelected)) {
+				showDeleteAllAlert();
+			}
+			break;
+		case R.id.paste:
+			if(!selectedFiles.isEmpty()) {
+				if(copySelected) {
+					new FileCopyTask(false).execute();
+				} else {
+					new FileCopyTask(true).execute();
+				}
+			}
+			break;
+		case R.id.copy:
+			if(!copySelected) {
+				copySelected = true;
+				selectEnable = false;
+				cutSelected = false;
+				cellIdentifier = new boolean[directories.size()];
+				mGridFolders.setAdapter(adptr);
+				mListFolders.setAdapter(adptr);
+			}
+			break;
+		case R.id.cut :
+			if(!cutSelected) {
+				cutSelected = true;
+				copySelected = false;
+				selectEnable = false;
+				if(!searchSelected) {
+					directories = OSFileUtils.listFiles(rootDirectory, hiddenFileEnable);
+				}
+				for(File file : selectedFiles) {
+					if(directories.contains(file)) {
+						directories.remove(file);
+					}
+				}
+				cellIdentifier = new boolean[directories.size()];
+				mGridFolders.setAdapter(adptr);
+				mListFolders.setAdapter(adptr);
+			}
+			break;
+		case R.id.cancel:
+			selectEnable = false;
+			mLayoutBottomActions.setVisibility(View.GONE);
+			mLayoutBottom.setVisibility(View.VISIBLE);
+			cellIdentifier = new boolean[directories.size()];
+			cutSelected = false;
+			copySelected = false;
+			refreshList();
+			break;
 		}
+	}
+
+	private void deleteSelectedFiles() {
+		OSFileUtils.deleteFiles(selectedFiles);
+		directories = OSFileUtils.listFiles(rootDirectory, hiddenFileEnable);
+		cellIdentifier = new boolean[directories.size()];
+		refreshList();
 	}
 
 	private void doFolderTypeButtonAction() {
@@ -399,7 +529,6 @@ public class MenuActivity extends Activity implements OnClickListener {
 	int count = 1;
 	private void createNewFile() {
 		try {
-			System.out.println("root directory = "+rootDirectory.getAbsolutePath());
 			String path = rootDirectory.getAbsolutePath()+File.separator;
 			File file = new File(path+"New file("+count+")");
 			if(file.exists()) {
@@ -411,6 +540,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 				Toast.makeText(getApplicationContext(), "Cannot create a file here", Toast.LENGTH_LONG).show();
 			} else {
 				directories = OSFileUtils.listFiles(rootDirectory, hiddenFileEnable);
+				cellIdentifier = new boolean[directories.size()];
 				refreshList();
 				Intent intent = new Intent(MenuActivity.this, DocumentActivity.class);
 				intent.putExtra("path", file.getAbsolutePath());
@@ -439,9 +569,22 @@ public class MenuActivity extends Activity implements OnClickListener {
 		preferences.updatePreviousPath(rootDirectory.getAbsolutePath());
 		mTextPath.setText(rootDirectory.getAbsolutePath().toString());
 		directories = OSFileUtils.listFiles(rootDirectory, hiddenFileEnable);
-		adptr = new FileAdapter(MenuActivity.this);
-		mGridFolders.setAdapter(adptr);
-		mListFolders.setAdapter(adptr);
+		cellIdentifier = new boolean[directories.size()];
+		reset();
+		refreshList();
+	}
+
+	private void reset() {
+		if(selectEnable) {
+			copySelected = false;
+			selectEnable = false;
+			cutSelected = false;
+			selectEnable = false;
+			mLayoutBottomActions.setVisibility(View.GONE);
+			mLayoutBottom.setVisibility(View.VISIBLE);
+		}
+		searchSelected = false;
+		cellIdentifier = new boolean[directories.size()];
 	}
 
 	private void doRecordButtonAction() {
@@ -466,7 +609,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 		} else if(fileMergePath != null) {
 			fileMergePath = null;
 			mImageSettings.setImageResource(R.drawable.settings);
-		} else if(fileCopyPath != null) {
+		} /*else if(fileCopyPath != null) {
 			try {
 				File source = new File(fileCopyPath);
 				File dest = new File(rootDirectory+File.separator+new File(fileCopyPath).getName());
@@ -477,9 +620,10 @@ public class MenuActivity extends Activity implements OnClickListener {
 				mImageSettings.setImageResource(R.drawable.settings);
 				fileCopyPath = null;
 				directories = OSFileUtils.listFiles(rootDirectory, hiddenFileEnable);
+				cellIdentifier = new boolean[directories.size()];
 				refreshList();
 			}
-		}
+		}*/
 
 
 		else {
@@ -488,7 +632,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 			overridePendingTransition(R.anim.right_to_left, R.anim.left_to_right);
 		}
 	}
-	
+
 	private void doSearchButtonAction() {
 		showSearchAlert();
 	}
@@ -496,12 +640,18 @@ public class MenuActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		directories = OSFileUtils.listFiles(rootDirectory, hiddenFileEnable);
-		hiddenFileEnable = preferences.isHidenFileEnable();
-		refreshList();
+		if(!searchSelected) {
+			directories = OSFileUtils.listFiles(rootDirectory, hiddenFileEnable);
+			hiddenFileEnable = preferences.isHidenFileEnable();
+			cellIdentifier = new boolean[directories.size()];
+			refreshList();
+		}
 	}
 
 	private void refreshList() {
+		if(!copySelected && !cutSelected) {
+			selectedFiles.clear();
+		}
 		OSFileUtils.sortFiles(directories);
 		adptr = new FileAdapter(MenuActivity.this);
 		mGridFolders.setAdapter(adptr);
@@ -565,6 +715,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 				dialog.dismiss();
 				DeleteRecursive(path, pos);
 				directories = OSFileUtils.listFiles(rootDirectory, hiddenFileEnable);
+				cellIdentifier = new boolean[directories.size()];
 				refreshList();
 			}
 		});
@@ -579,6 +730,38 @@ public class MenuActivity extends Activity implements OnClickListener {
 		});
 	}
 
+	private void showDeleteAllAlert() {
+		final Dialog dialog = new Dialog(this);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setCancelable(true);
+		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+		dialog.setContentView(R.layout.dialog_two_button);
+		TextView text = (TextView) dialog.findViewById(R.id.text_message);
+		text.setText("Are you sure you want to delete ?");
+
+		dialog.show();
+
+		Button buttonYes = (Button) dialog.findViewById(R.id.button_yes);
+		buttonYes.setText("Yes");
+		buttonYes.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+				deleteSelectedFiles();
+			}
+		});
+
+		Button buttonNo = (Button) dialog.findViewById(R.id.button_no);
+		buttonNo.setText("No");
+		buttonNo.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+	}
+
+
 
 	private void showNewFileAlert(final boolean isFolder) {
 		final Dialog dialog = new Dialog(this);
@@ -587,8 +770,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 		dialog.setContentView(R.layout.layout_textfield);
 		final EditText mFileNameField = (EditText) dialog.findViewById(R.id.file_name_field);
-		String text = isFolder ? "New folder" : "New document";
-		mFileNameField.setText("record01", TextView.BufferType.SPANNABLE);
+		mFileNameField.setText("New folder", TextView.BufferType.SPANNABLE);
 		mFileNameField.selectAll();
 		dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 		dialog.show();
@@ -610,6 +792,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 						file.createNewFile();
 					}
 					directories = OSFileUtils.listFiles(rootDirectory, isFolder);
+					cellIdentifier = new boolean[directories.size()];
 					refreshList();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -647,7 +830,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 		mFileNameField.setText(name, TextView.BufferType.SPANNABLE);
 		mFileNameField.selectAll();
 		dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-		
+
 		dialog.show();
 		Button buttonRename = (Button) dialog.findViewById(R.id.button_rename);
 		buttonRename.setOnClickListener(new OnClickListener() {
@@ -659,6 +842,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 					Toast.makeText(getApplicationContext(), "Cannot rename a folder/file here", Toast.LENGTH_LONG).show();
 				} else {
 					directories = OSFileUtils.listFiles(rootDirectory, hiddenFileEnable);
+					cellIdentifier = new boolean[directories.size()];
 					refreshList();
 				}
 			}
@@ -685,8 +869,14 @@ public class MenuActivity extends Activity implements OnClickListener {
 					showRenameFileAlert(path);
 					break;
 				case 1:
-					fileCopyPath = path;
-					mImageSettings.setImageResource(R.drawable.paste);
+					copySelected = true;
+					selectEnable = false;
+					cutSelected = false;
+					selectedFiles.add(new File(path));
+					mLayoutBottomActions.setVisibility(View.VISIBLE);
+					mLayoutBottom.setVisibility(View.GONE);
+					//fileCopyPath = path;
+					//mImageSettings.setImageResource(R.drawable.paste);
 					break;
 				case 2:
 					showDeleteAlert(path, pos);
@@ -708,8 +898,8 @@ public class MenuActivity extends Activity implements OnClickListener {
 		});
 		dialog.show();
 	}
-	
-	
+
+
 	private void showFileCreateOptionsAlert() {
 		final Dialog dialog = new Dialog(this);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -808,11 +998,11 @@ public class MenuActivity extends Activity implements OnClickListener {
 		dialog.setContentView(R.layout.dialog_properties);
 		File file = new File(path);
 		TextView name = (TextView) dialog.findViewById(R.id.file_name);
-		TextView type = (TextView) dialog.findViewById(R.id.file_type);
+		TextView filePath = (TextView) dialog.findViewById(R.id.file_path);
 		TextView size = (TextView) dialog.findViewById(R.id.file_size);
 		TextView date = (TextView) dialog.findViewById(R.id.file_date);
 		name.setText("Name : "+file.getName());
-		type.setText((file.isDirectory()) ? "Type : Folder" : "Type : File");
+		filePath.setText("Path : "+path);//(file.isDirectory()) ? "Type : Folder" : "Type : File");
 		size.setText("Size : "+OSFileUtils.getFileSize(path));
 		String time = new SimpleDateFormat("dd MMM yyyy hh:mm a").format(
 				new Date(file.lastModified()) 
@@ -827,7 +1017,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 		});
 		dialog.show();
 	}
-	
+
 	private void showSearchAlert() {
 		final Dialog dialog = new Dialog(this);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -846,6 +1036,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 			public void onClick(View v) {
 				if(mFileNameField.getText().toString().trim().length() > 0) {
 					dialog.dismiss();
+					searchSelected = true;
 					new SearchTask(mFileNameField.getText().toString()).executeOnExecutor(Executors.newFixedThreadPool(1));
 				} else {
 					Toast.makeText(getApplicationContext(), "This field cannot be left blank", Toast.LENGTH_LONG).show();
@@ -857,7 +1048,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 
 
 
-	
+
 
 
 	public class MergeTask extends AsyncTask<Void, Void, String> {
@@ -895,12 +1086,60 @@ public class MenuActivity extends Activity implements OnClickListener {
 			fileMergePath = null;
 			mImageSettings.setImageResource(R.drawable.settings);
 			directories = OSFileUtils.listFiles(rootDirectory, hiddenFileEnable);
+			cellIdentifier = new boolean[directories.size()];
 			refreshList();
 		}
 	}
-	
-	
-	
+
+
+	public class FileCopyTask extends AsyncTask<Void, Void, String> {
+
+		private ProgressDialog progress		= null;
+
+		private boolean isCut = false;
+
+		public FileCopyTask(boolean isCut) {
+			this.isCut = isCut;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			progress = new ProgressDialog(MenuActivity.this);
+			progress.setMessage("Copying...");
+			progress.setCancelable(false);
+			progress.show();
+		}
+
+		@Override
+		protected String doInBackground(Void... arg0) {
+			if(isCut) {
+				OSFileUtils.cutFiles(selectedFiles, rootDirectory);
+				OSFileUtils.deleteFiles(selectedFiles);
+				selectedFiles.clear();
+			} else {
+				OSFileUtils.copyFiles(selectedFiles, rootDirectory);
+				selectedFiles.clear();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			progress.cancel();
+			directories = OSFileUtils.listFiles(rootDirectory, hiddenFileEnable);
+			selectEnable = false;
+			copySelected = false;
+			mLayoutBottomActions.setVisibility(View.GONE);
+			mLayoutBottom.setVisibility(View.VISIBLE);
+			cellIdentifier = new boolean[directories.size()];
+			refreshList();
+		}
+	}
+
+
+
 	public class SearchTask extends AsyncTask<Void, Void, String> {
 
 
@@ -930,10 +1169,11 @@ public class MenuActivity extends Activity implements OnClickListener {
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
 			progress.cancel();
+			cellIdentifier = new boolean[directories.size()];
 			refreshList();
 		}
 	}
-	
+
 
 	public void openFile(String name) {
 		Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
@@ -953,15 +1193,25 @@ public class MenuActivity extends Activity implements OnClickListener {
 		// custom message for the intent
 		startActivity(Intent.createChooser(intent, "Choose an Application:"));
 	}
-	
+
 
 	@Override
 	public void onBackPressed() {
+		if(selectEnable || (mLayoutBottomActions.isShown() && !copySelected && !cutSelected)) {
+			selectEnable = false;
+			mLayoutBottomActions.setVisibility(View.GONE);
+			mLayoutBottom.setVisibility(View.VISIBLE);
+			cellIdentifier = new boolean[directories.size()];
+			cutSelected = false;
+			copySelected = false;
+			refreshList();
+			return;
+		}
 		String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
 		if(mergeTask != null) {
 			mergeTask.cancel(true);
 			fileMergePath = null;
-		} else if(!rootPath.equalsIgnoreCase(rootDirectory.toString())) {
+		} else if(searchSelected || !rootPath.equalsIgnoreCase(rootDirectory.toString())) {
 			doFolderButtonAction();
 		} else {
 			super.onBackPressed();

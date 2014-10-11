@@ -79,9 +79,10 @@ public class RecordActivity extends Activity implements OnClickListener{
 	private void initObjects() {
 		preferences = new AppPreferences(this);
 		filePath = getIntent().getExtras().getString("path");
-		int sampleRate = preferences.getSampleRate();
+		int sampleRate = 44100;
 		int sampleFormat = preferences.getSampleFormat();
-		mRecMicToMp3 = new RecMicToMp3(sampleRate,sampleFormat);
+		int bitRate = preferences.getSampleRate();
+		mRecMicToMp3 = new RecMicToMp3(sampleRate,sampleFormat,bitRate);
 		mRecMicToMp3.setHandle(new Handler() {
 			@Override
 			public void handleMessage(Message msg) {

@@ -120,83 +120,170 @@
         android:verticalSpacing="1dip"
         android:visibility="visible" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/bottombar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/background_border"
-        android:orientation="horizontal"
-        android:weightSum="5" >
+        android:layout_alignParentBottom="true" >
 
-        <Button
-            android:id="@+id/new_create"
-            android:layout_width="0dip"
-            android:layout_height="50dip"
-            android:layout_weight="1"
-            android:background="@color/blue"
-            android:text="Create"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+        <LinearLayout
+            android:id="@+id/bottombar_options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_border"
+            android:orientation="horizontal"
+            android:weightSum="5" >
 
-        <View
-            android:layout_width="1dip"
-            android:layout_height="match_parent"
-            android:background="@color/white" />
+            <Button
+                android:id="@+id/new_create"
+                android:layout_width="0dip"
+                android:layout_height="50dip"
+                android:layout_weight="1"
+                android:background="@drawable/button_background"
+                android:text="Create"
+                android:textColor="@drawable/text_selector"
+                android:textSize="12sp" />
 
-        <Button
-            android:id="@+id/favourite"
-            android:layout_width="0dip"
-            android:layout_height="50dip"
-            android:layout_weight="1"
-            android:background="@color/blue"
-            android:text="Favourite"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+            <View
+                android:layout_width="1dip"
+                android:layout_height="match_parent"
+                android:background="@color/white" />
 
-        <View
-            android:layout_width="1dip"
-            android:layout_height="match_parent"
-            android:background="@color/white" />
+            <Button
+                android:id="@+id/favourite"
+                android:layout_width="0dip"
+                android:layout_height="50dip"
+                android:layout_weight="1"
+                android:background="@drawable/button_background"
+                android:text="Favourite"
+                android:textColor="@drawable/text_selector"
+                android:textSize="12sp" />
 
-        <Button
-            android:id="@+id/refresh"
-            android:layout_width="0dip"
-            android:layout_height="50dip"
-            android:layout_weight="1"
-            android:background="@color/blue"
-            android:text="Refresh"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+            <View
+                android:layout_width="1dip"
+                android:layout_height="match_parent"
+                android:background="@color/white" />
 
-        <View
-            android:layout_width="1dip"
-            android:layout_height="match_parent"
-            android:background="@color/white" />
+            <Button
+                android:id="@+id/refresh"
+                android:layout_width="0dip"
+                android:layout_height="50dip"
+                android:layout_weight="1"
+                android:background="@drawable/button_background"
+                android:text="Refresh"
+                android:textColor="@drawable/text_selector"
+                android:textSize="12sp" />
 
-        <Button
-            android:id="@+id/search"
-            android:layout_width="0dip"
-            android:layout_height="50dip"
-            android:layout_weight="1"
-            android:background="@color/blue"
-            android:text="Search"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
-         <View
-            android:layout_width="1dip"
-            android:layout_height="match_parent"
-            android:background="@color/white" />
+            <View
+                android:layout_width="1dip"
+                android:layout_height="match_parent"
+                android:background="@color/white" />
 
-        <Button
-            android:id="@+id/select"
-            android:layout_width="0dip"
-            android:layout_height="50dip"
-            android:layout_weight="1"
-            android:background="@color/blue"
-            android:text="Select"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/search"
+                android:layout_width="0dip"
+                android:layout_height="50dip"
+                android:layout_weight="1"
+                android:background="@drawable/button_background"
+                android:text="Search"
+                android:textColor="@drawable/text_selector"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="1dip"
+                android:layout_height="match_parent"
+                android:background="@color/white" />
+
+            <Button
+                android:id="@+id/select"
+                android:layout_width="0dip"
+                android:layout_height="50dip"
+                android:layout_weight="1"
+                android:background="@drawable/button_background"
+                android:text="Select"
+                android:textColor="@drawable/text_selector"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bottombar_actions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_border"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:weightSum="5" >
+
+            <Button
+                android:id="@+id/copy"
+                android:layout_width="0dip"
+                android:layout_height="50dip"
+                android:layout_weight="1"
+                android:background="@drawable/button_background"
+                android:text="Copy"
+                android:textColor="@drawable/text_selector"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="1dip"
+                android:layout_height="match_parent"
+                android:background="@color/white" />
+
+            <Button
+                android:id="@+id/cut"
+                android:layout_width="0dip"
+                android:layout_height="50dip"
+                android:layout_weight="1"
+                android:background="@drawable/button_background"
+                android:text="Cut"
+                android:textColor="@drawable/text_selector"
+                android:textSize="12sp" />
+            
+            <View
+                android:layout_width="1dip"
+                android:layout_height="match_parent"
+                android:background="@color/white" />
+
+            <Button
+                android:id="@+id/paste"
+                android:layout_width="0dip"
+                android:layout_height="50dip"
+                android:layout_weight="1"
+                android:background="@drawable/button_background"
+                android:text="Paste"
+                android:textColor="@drawable/text_selector"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="1dip"
+                android:layout_height="match_parent"
+                android:background="@color/white" />
+
+            <Button
+                android:id="@+id/delete"
+                android:layout_width="0dip"
+                android:layout_height="50dip"
+                android:layout_weight="1"
+                android:background="@drawable/button_background"
+                android:text="Delete"
+                android:textColor="@drawable/text_selector"
+                android:textSize="12sp" />
+            
+             <View
+                android:layout_width="1dip"
+                android:layout_height="match_parent"
+                android:background="@color/white" />
+
+            <Button
+                android:id="@+id/cancel"
+                android:layout_width="0dip"
+                android:layout_height="50dip"
+                android:layout_weight="1"
+                android:background="@drawable/button_background"
+                android:text="Cancel"
+                android:textColor="@drawable/text_selector"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

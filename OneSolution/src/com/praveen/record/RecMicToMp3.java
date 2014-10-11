@@ -32,6 +32,7 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Handler;
+import android.widget.Toast;
 
 import com.uraroji.garage.android.lame.SimpleLame;
 
@@ -47,6 +48,7 @@ public class RecMicToMp3 {
 	private Handler mHandler;
 	private boolean isPause=false;
 	private int sampleFormat;
+	private int bitRate;
 
 	public static final int MSG_REC_STARTED = 0;
 	public static final int MSG_REC_STOPPED = 1;
@@ -63,13 +65,14 @@ public class RecMicToMp3 {
 
 	public static final int MSG_ERROR_CLOSE_FILE = 8;
 
-	public RecMicToMp3(int sampleRate, int sampleFormat) {
+	public RecMicToMp3(int sampleRate, int sampleFormat, int bitRate) {
 		if (sampleRate <= 0) {
 			throw new InvalidParameterException(
 					"Invalid sample rate specified.");
 		}
 		this.mSampleRate = sampleRate;
 		this.sampleFormat = sampleFormat;
+		this.bitRate = bitRate;
 	}
 
 	public void start() {
@@ -108,7 +111,8 @@ public class RecMicToMp3 {
 				}
 
 				// Lame init
-				SimpleLame.init(mSampleRate, 1, mSampleRate, 32);
+				System.out.println("bit rate = "+bitRate);
+				SimpleLame.init(mSampleRate, 1, mSampleRate, bitRate);
 
 				mIsRecording = true; 
 				try {

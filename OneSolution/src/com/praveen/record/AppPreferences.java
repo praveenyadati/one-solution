@@ -27,7 +27,7 @@ public class AppPreferences
 	}
 
 	public int getSampleRate() {
-		return myPrefs.getInt("sampleRate", 44100);
+		return myPrefs.getInt("sampleRate", 32);
 	}
 	
 	public synchronized void updateSampleFormat(int sampleFormat) {

@@ -1,12 +1,8 @@
 package com.praveen.record;
 
-import java.lang.Character.UnicodeBlock;
-
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioFormat;
 import android.os.Bundle;
@@ -21,7 +17,6 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class SettingsActivity extends Activity implements OnClickListener {
 	
@@ -64,8 +59,8 @@ public class SettingsActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch(v.getId()) {
 		case R.id.samplerate_layout:
-			int[]  sampleRates= {8,16,32,64,128,192,256,320};
-			String untis = " khz";
+			int[]  sampleRates= {32,64,128,192,256,320};
+			String untis = " kbps";
 			showDetailsAlert(sampleRates, untis);
 			break;
 		case R.id.sampleformate_layout:
